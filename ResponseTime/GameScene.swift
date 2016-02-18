@@ -88,17 +88,18 @@ class GameScene: SKScene {
         
         self.addChild(self.sprite)
         
-        questionView.frame = CGRectMake(frame.size.width/2, frame.size.height/2, 200, 150)
+        questionView.frame = CGRectMake(screenWidth/2, screenHeight/2, 200, 150)
         questionView.hidden = false
         questionView.backgroundColor = UIColor.blueColor()
         
         questionLabel.text = "Did the circle change?"
         questionLabel.hidden = false
         
-        print ("bla")
         questionView.addSubview(questionLabel)
-        self.view?.superview?.insertSubview(self.questionView, atIndex:0)
-        print ("bla2")
+
+        self.view?.addSubview(questionView)
+        
+        
         print (self)
 
     }
