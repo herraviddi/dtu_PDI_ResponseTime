@@ -25,8 +25,10 @@ class GameScene: SKScene {
     var questionLabel = UILabel()
     let yesBtn = UIButton()
     let noBtn = UIButton()
+    let submitBtn = UIButton()
     var yesChosen = false
     var noChosen = false
+    var numberOfExtraTouches = 0
     
     
     // screen properties
@@ -44,10 +46,12 @@ class GameScene: SKScene {
     
     var numberOfGames = 0
     
+    var games = [OneGame]()
+    
     class OneGame {
         var timeVisible = Double()
         var yesOrNo = ""
-        var pressedAgainAfter = Double()
+        var numberOfExtraTouches = 0
     }
     
     override func didMoveToView(view: SKView) {
@@ -79,7 +83,7 @@ class GameScene: SKScene {
         gameStartTime = NSDate.timeIntervalSinceReferenceDate()
         
         let randomSecondDelay = randomBetweenNumbers(0.5, secondNum: 4.8)
-        timeVisible = randomBetweenNumbers(1, secondNum: 3)
+        timeVisible = randomBetweenNumbers(0.0, secondNum: 1.0)
         print(timeVisible)
         timeVisibleArray.append(Double(timeVisible))
         
@@ -119,10 +123,11 @@ class GameScene: SKScene {
     
     func yesButtonPressed() {
         print ("pressed yes")
-        yesChosen = true
-        if yesChosen == true && timeBetweenClick == 0.0{
-            timeBetweenClick = self.clickTime
+        if yesChosen == true{
+            numberOfExtraTouches += 1
         }
+        
+        yesChosen = true
         
         if noChosen == false {
             delay(Double(self.timeVisible))  {
@@ -134,10 +139,13 @@ class GameScene: SKScene {
     
     func noButtonPressed() {
         print ("pressed no")
-        noChosen = true
-        if noChosen == true && timeBetweenClick == 0.0 {
-            timeBetweenClick = self.clickTime
+        
+        if noChosen == true {
+            numberOfExtraTouches += 1
         }
+        
+        noChosen = true
+
         
         if yesChosen == false {
             delay(Double(self.timeVisible))  {
@@ -154,19 +162,34 @@ class GameScene: SKScene {
         if yesChosen || noChosen {
             let oneGame = OneGame()
             oneGame.timeVisible = Double(self.timeVisible)
-            oneGame.pressedAgainAfter = timeBetweenClick
+            oneGame.numberOfExtraTouches = numberOfExtraTouches
+            
             if yesChosen == true {
                 oneGame.yesOrNo = "yes"
             }
+            
             else {
                 oneGame.yesOrNo = "no"
             }
-            print (oneGame.pressedAgainAfter)
+            print (oneGame.numberOfExtraTouches)
+            
             sendToApi(oneGame)
+            games.append(oneGame)
             self.timeVisible = 0.0
             yesChosen = false
             noChosen = false
-            displayGame()
+            numberOfExtraTouches = 0
+            self.noBtn.backgroundColor = UIColor.clearColor()
+            self.yesBtn.backgroundColor = UIColor.clearColor()
+            numberOfGames += 1
+            if numberOfGames < 3 {
+                displayGame()
+            }
+            else {
+                submitBtn.setTitle("Thank you", forState: UIControlState.Normal)
+                submitBtn.enabled = false
+            }
+            
         }
         
         
@@ -218,7 +241,6 @@ class GameScene: SKScene {
         
         questionView.addSubview(noBtn)
         
-        let submitBtn = UIButton()
         submitBtn.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         submitBtn.setTitle("Next ->", forState: UIControlState.Normal)
         submitBtn.addTarget(self, action: "submit", forControlEvents: UIControlEvents.TouchUpInside)
@@ -283,6 +305,15 @@ class GameScene: SKScene {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
        /* Called when a touch begins */
         print ("pressed again")
+        var i = 1
+        for game in games {
+            print ("Game number " + String(i))
+            print ("Extra touches: " + String(game.numberOfExtraTouches))
+            print ("Yes/No: " + game.yesOrNo)
+            print ("Time visible: " + String(game.timeVisible))
+            i += 1
+            print ("------------")
+        }
 
     }
     
