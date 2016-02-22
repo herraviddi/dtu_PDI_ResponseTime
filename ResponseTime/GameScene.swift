@@ -8,6 +8,8 @@
 
 import Foundation
 import SpriteKit
+import CoreData
+
 
 typealias Task = (cancel : Bool) -> ()
 
@@ -15,6 +17,8 @@ class GameScene: SKScene {
     
     let sprite = SKShapeNode(circleOfRadius: 100)
     
+    
+    var results = [NSManagedObject]()
     
     var gameStartTime = NSTimeInterval()
     var circleStartTime = NSTimeInterval()
@@ -147,7 +151,7 @@ class GameScene: SKScene {
             delay(Double(self.timeVisible))  {
                 self.yesBtn.backgroundColor = UIColor.greenColor()
                 self.noExtraTouchArray.append(self.timeVisible)
-                self.delay(0.5){
+                self.delay(0.3){
                     self.submit()
                 }
             }
@@ -168,7 +172,7 @@ class GameScene: SKScene {
         if yesChosen == false {
             delay(Double(self.timeVisible))  {
                 self.noBtn.backgroundColor = UIColor.redColor()
-                self.delay(0.5){
+                self.delay(0.3){
                     self.submit()
                 }
             }
@@ -223,12 +227,17 @@ class GameScene: SKScene {
             self.noBtn.backgroundColor = UIColor.clearColor()
             self.yesBtn.backgroundColor = UIColor.clearColor()
 
+            print(timeVisible)
             questionViewEnabled = false
             numberOfGames += 1
-            if numberOfGames < 10 {
+            if numberOfGames < 3 {
                 displayGame()
             }
             else {
+                
+//                self.questionView.removeFromSuperview()
+                
+                self.gameTimeLabel.hidden = true
                 
                 self.yesBtn.removeFromSuperview()
                 self.noBtn.removeFromSuperview()
@@ -238,7 +247,7 @@ class GameScene: SKScene {
                 let medianBadTimeHeadingLabel = UILabel()
                 medianBadTimeHeadingLabel.textColor = UIColor.whiteColor()
                 medianBadTimeHeadingLabel.textAlignment = .Center
-                medianBadTimeHeadingLabel.font = UIFont.systemFontOfSize(25.0)
+                medianBadTimeHeadingLabel.font = UIFont.systemFontOfSize(20.0)
                 medianBadTimeHeadingLabel.frame = CGRectMake((self.view?.frame.size.width)!/2-150, self.view!.frame.size.height/2-160, 300, 50)
                 medianBadTimeHeadingLabel.text = "Median NOT accepted time"
                 self.view?.addSubview(medianBadTimeHeadingLabel)
@@ -246,16 +255,21 @@ class GameScene: SKScene {
                 let medianBadTimeLabel = UILabel()
                 medianBadTimeLabel.textColor = UIColor.redColor()
                 medianBadTimeLabel.textAlignment = .Center
-                medianBadTimeLabel.font = UIFont.systemFontOfSize(30.0)
+                medianBadTimeLabel.font = UIFont.systemFontOfSize(70.0)
                 medianBadTimeLabel.frame = CGRectMake((self.view?.frame.size.width)!/2-100, self.view!.frame.size.height/2-100, 200, 50)
-                medianBadTimeLabel.text = NSString(format: " %.2f",getMedianValue(extraTouchArray)) as String
+                
+                if extraTouchArray.count != 0{
+                    medianBadTimeLabel.text = NSString(format: " %.2f",getMedianValue(extraTouchArray)) as String
+                }else{
+                    medianBadTimeLabel.text = "No result"
+                }
                 self.view?.addSubview(medianBadTimeLabel)
 
                 
                 let medianGoodTimeHeadingLabel = UILabel()
                 medianGoodTimeHeadingLabel.textColor = UIColor.whiteColor()
                 medianGoodTimeHeadingLabel.textAlignment = .Center
-                medianGoodTimeHeadingLabel.font = UIFont.systemFontOfSize(25.0)
+                medianGoodTimeHeadingLabel.font = UIFont.systemFontOfSize(20.0)
                 medianGoodTimeHeadingLabel.frame = CGRectMake((self.view?.frame.size.width)!/2-150, self.view!.frame.size.height/2, 300, 50)
                 medianGoodTimeHeadingLabel.text = "Median accepted time"
                 self.view?.addSubview(medianGoodTimeHeadingLabel)
@@ -263,20 +277,55 @@ class GameScene: SKScene {
                 let medianGoodTimeLabel = UILabel()
                 medianGoodTimeLabel.textColor = UIColor.greenColor()
                 medianGoodTimeLabel.textAlignment = .Center
-                medianGoodTimeLabel.font = UIFont.systemFontOfSize(25.0)
+                medianGoodTimeLabel.font = UIFont.systemFontOfSize(70.0)
                 medianGoodTimeLabel.frame = CGRectMake((self.view?.frame.size.width)!/2-100, self.view!.frame.size.height/2+60, 200, 50)
-                medianGoodTimeLabel.text = NSString(format: " %.2f",getMedianValue(noExtraTouchArray)) as String
+
+                if noExtraTouchArray.count != 0{
+                    medianGoodTimeLabel.text = NSString(format: " %.2f",getMedianValue(noExtraTouchArray)) as String
+                }else{
+                    medianGoodTimeLabel.text = "no result"
+                }
+
                 self.view?.addSubview(medianGoodTimeLabel)
                 
-                saveResults()
+//                saveResults()
+                
+//                let gamescene = ResultScreenScene(size: size)
+//                gamescene.scaleMode = scaleMode
+//                let transitionType = SKTransition.flipHorizontalWithDuration(0.3)
+//                
+//                view?.presentScene(gamescene, transition: transitionType)
                 
             }
         }
     }
     
     func saveResults(){
-        let medianGoodTimeResultDict = ["date":NSDate(),"goodTime":getMedianValue(noExtraTouchArray),"badTime":getMedianValue(extraTouchArray)]
-        defaults.setObject(medianGoodTimeResultDict, forKey: "ResultDict")
+        //1
+        let appDelegate =
+        UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let managedContext = appDelegate.managedObjectContext
+        
+        //2
+        let entity =  NSEntityDescription.entityForName("Results",
+            inManagedObjectContext:managedContext)
+        
+        let userResult = NSManagedObject(entity: entity!,
+            insertIntoManagedObjectContext: managedContext)
+        
+        //3
+        userResult.setValue(NSDate(), forKey: "date")
+        userResult.setValue(getMedianValue(noExtraTouchArray), forKey: "goodTime")
+        userResult.setValue(getMedianValue(extraTouchArray), forKey: "badTime")
+        
+        //4
+        do {
+            try managedContext.save()
+            //5
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
+        }
     }
     
     func createQuestion() {
