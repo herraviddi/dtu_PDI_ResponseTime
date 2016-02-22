@@ -316,8 +316,17 @@ class GameScene: SKScene {
         
         //3
         userResult.setValue(NSDate(), forKey: "date")
-        userResult.setValue(getMedianValue(noExtraTouchArray), forKey: "goodTime")
-        userResult.setValue(getMedianValue(extraTouchArray), forKey: "badTime")
+        if noExtraTouchArray.count != 0{
+            userResult.setValue(getMedianValue(noExtraTouchArray), forKey: "goodTime")
+        }else{
+            userResult.setValue(0.0, forKey: "goodTime")
+        }
+        
+        if extraTouchArray.count != 0{
+            userResult.setValue(getMedianValue(extraTouchArray), forKey: "badTime")
+        }else{
+            userResult.setValue(0.0, forKey: "badTime")
+        }
         
         //4
         do {

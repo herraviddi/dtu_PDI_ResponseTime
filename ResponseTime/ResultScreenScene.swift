@@ -24,7 +24,7 @@ class ResultScreenScene: SKScene {
         let managedContext = appDelegate.managedObjectContext
         
         //2
-        let fetchRequest = NSFetchRequest(entityName: "UserResult")
+        let fetchRequest = NSFetchRequest(entityName: "Results")
         
         //3
         do {
