@@ -14,6 +14,9 @@
 		79510FFA1C74BAD500B5DCDC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79510FF81C74BAD500B5DCDC /* Main.storyboard */; };
 		79510FFC1C74BAD500B5DCDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79510FFB1C74BAD500B5DCDC /* Assets.xcassets */; };
 		79510FFF1C74BAD500B5DCDC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79510FFD1C74BAD500B5DCDC /* LaunchScreen.storyboard */; };
+		79837D701C7B801000003309 /* StartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79837D6F1C7B801000003309 /* StartScene.swift */; };
+		79837D721C7B83DF00003309 /* CountInGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79837D711C7B83DF00003309 /* CountInGameScene.swift */; };
+		79837D741C7B84EF00003309 /* ResultScreenScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79837D731C7B84EF00003309 /* ResultScreenScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		79510FFB1C74BAD500B5DCDC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		79510FFE1C74BAD500B5DCDC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		795110001C74BAD500B5DCDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		79837D6F1C7B801000003309 /* StartScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartScene.swift; sourceTree = "<group>"; };
+		79837D711C7B83DF00003309 /* CountInGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountInGameScene.swift; sourceTree = "<group>"; };
+		79837D731C7B84EF00003309 /* ResultScreenScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultScreenScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +67,9 @@
 				79510FF01C74BAD500B5DCDC /* AppDelegate.swift */,
 				79510FF21C74BAD500B5DCDC /* GameScene.sks */,
 				79510FF41C74BAD500B5DCDC /* GameScene.swift */,
+				79837D731C7B84EF00003309 /* ResultScreenScene.swift */,
+				79837D6F1C7B801000003309 /* StartScene.swift */,
+				79837D711C7B83DF00003309 /* CountInGameScene.swift */,
 				79510FF61C74BAD500B5DCDC /* GameViewController.swift */,
 				79510FF81C74BAD500B5DCDC /* Main.storyboard */,
 				79510FFB1C74BAD500B5DCDC /* Assets.xcassets */,
@@ -144,8 +153,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				79510FF51C74BAD500B5DCDC /* GameScene.swift in Sources */,
+				79837D721C7B83DF00003309 /* CountInGameScene.swift in Sources */,
 				79510FF71C74BAD500B5DCDC /* GameViewController.swift in Sources */,
+				79837D741C7B84EF00003309 /* ResultScreenScene.swift in Sources */,
 				79510FF11C74BAD500B5DCDC /* AppDelegate.swift in Sources */,
+				79837D701C7B801000003309 /* StartScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,6 +269,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ResponseTime/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.herraviddi.ResponseTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -268,6 +281,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ResponseTime/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.herraviddi.ResponseTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -293,6 +307,7 @@
 				795110051C74BAD500B5DCDC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
