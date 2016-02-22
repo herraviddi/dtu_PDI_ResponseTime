@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import Charts
 
 class ResultScreenScene: SKScene {
 
